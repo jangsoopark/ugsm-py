@@ -1,12 +1,6 @@
 import numpy as np
 
 
-def lf_norm(m):
-    _m = m.ravel(order='K')
-    _norm = np.trace(np.dot(_m.T, _m))
-    return np.sqrt(_norm)
-
-
 def derivative_x(m):
     return np.append(np.diff(m, 1, axis=1), m[:, [0]] - m[:, [-1]], axis=1)
 

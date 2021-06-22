@@ -1,5 +1,4 @@
 from scipy import fftpack
-from scipy import linalg
 import numpy as np
 
 import copy
@@ -72,7 +71,7 @@ def ugsm(image, params):
         u1 = r - s
         u2 = r - _s
 
-        relative_change = linalg.norm(u1 - u2, ord='fro') / np.linalg.norm(u1, ord='fro')
+        relative_change = np.linalg.norm(u1 - u2, ord='fro') / np.linalg.norm(u1, ord='fro')
 
         d_s = utils.derivative_y(s)
         d_r_s = utils.derivative_x(r - s)
