@@ -1,4 +1,5 @@
 from scipy import fftpack
+from scipy import linalg
 import numpy as np
 
 import copy
@@ -40,7 +41,6 @@ def ugsm(image, params):
 
     i = 0
     relative_change = 1
-
     while relative_change > tol and i < max_iter:
         # u-sub-problem in equation (19)
         _u = d_r_s + p1.T / beta_1
@@ -72,7 +72,7 @@ def ugsm(image, params):
         u1 = r - s
         u2 = r - _s
 
-        relative_change = np.linalg.norm(u1 - u2, 2) / np.linalg.norm(u1, 2)
+        relative_change = linalg.norm(u1 - u2, ord='fro') / np.linalg.norm(u1, ord='fro')
 
         d_s = utils.derivative_y(s)
         d_r_s = utils.derivative_x(r - s)
@@ -82,5 +82,5 @@ def ugsm(image, params):
         p2 = p2 + 1.618 * beta_2 * (s - v).T
         p3 = p3 + 1.618 * beta_3 * (d_s - w).T
         i += 1
-
+    print(relative_change)
     return s, i
