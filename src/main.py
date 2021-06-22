@@ -6,11 +6,10 @@ import time
 import json
 import os
 
-from skimage import color
 import numpy as np
 import cv2
 
-import utils
+import color
 import ugsm
 
 flags.DEFINE_string('image_path', default='experiments/exp3/obama.bmp', help='')
@@ -23,8 +22,8 @@ project_root = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 def main(_):
     image = cv2.imread(os.path.join(project_root, FLAGS.image_path))
     rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # rgb = rgb.astype(np.float32)
-    yuv = color.rgb2ycbcr(rgb) / 255
+    rgb = rgb.astype(np.float32) / 255
+    yuv = color.rgb2ycbcr(rgb)
 
     with open(os.path.join(project_root, FLAGS.config_path), mode='r', encoding='utf-8') as f:
         params = json.load(f)
@@ -42,7 +41,7 @@ def main(_):
     de_rain[:, :, 2] = yuv[:, :, 2]
 
     cv2.imshow('original', image)
-    derain_rgb = color.ycbcr2rgb(de_rain * 255)
+    derain_rgb = color.ycbcr2rgb(de_rain)
     cv2.imshow(f'de-rain iter={i}', cv2.cvtColor(derain_rgb, cv2.COLOR_RGB2BGR))
     cv2.imshow('s', s)
     cv2.waitKey()

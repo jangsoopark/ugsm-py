@@ -72,7 +72,7 @@ def ugsm(image, params):
         u1 = r - s
         u2 = r - _s
 
-        relative_change = np.linalg.norm(u1 - u2, ord='fro') / np.linalg.norm(u1, ord='fro')
+        relative_change = np.linalg.norm(u1 - u2, ord=2) / np.linalg.norm(u1, ord=2)
 
         d_s = utils.derivative_y(s)
         d_r_s = utils.derivative_x(r - s)
