@@ -11,7 +11,7 @@ def derivative_y(m):
 
 def derivative_xy(x, y):
     _dxy = np.append(x[:, [-1]] - x[:, [0]], -np.diff(x, 1, axis=1), axis=1)
-    _dxy += np.append(np.diff(y, 1, axis=0), y[[-1], :] - y[[0], :], axis=0)
+    _dxy += np.append(y[[-1], :] - y[[0], :], -np.diff(y, 1, axis=0), axis=0)
     return _dxy
 
 

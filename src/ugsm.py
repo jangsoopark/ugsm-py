@@ -41,7 +41,7 @@ def ugsm(image, params):
     i = 0
     relative_change = 1
     while relative_change > tol and i < max_iter:
-        print(relative_change)
+
         # u-sub-problem in equation (19)
         _u = d_r_s + p1.T / beta_1
         u = np.sign(_u) * np.maximum(0, np.abs(_u) - lambda_1 / beta_1)
@@ -58,6 +58,7 @@ def ugsm(image, params):
         _s = copy.deepcopy(s)
 
         t1 = beta_1 * utils.derivative_x(r) - beta_1 * u + p1.T  # beta_1 * d_x r - beta_1 * u + p_1
+
         t2 = beta_2 * v - p2.T  # beta_2 * v - p_2
         t3 = beta_3 * w - p3.T  # beta_3 * w - p3
 
@@ -72,7 +73,7 @@ def ugsm(image, params):
         u1 = r - s
         u2 = r - _s
 
-        relative_change = np.linalg.norm(u1 - u2, ord=2) / np.linalg.norm(u1, ord=2)
+        relative_change = np.linalg.norm(u1 - u2, ord='fro') / np.linalg.norm(u1, ord='fro')
 
         d_s = utils.derivative_y(s)
         d_r_s = utils.derivative_x(r - s)
