@@ -1,3 +1,4 @@
+from skimage import transform
 from skimage import util
 from scipy import signal
 import numpy as np
@@ -126,13 +127,15 @@ def get_c(m):
     return c
 
 
-def synthetic_rain(shape, ksize=50):
+def synthetic_rain(shape, ksize=50, angle=190):
     rain = np.zeros(shape)
     rain = util.random_noise(rain, mode='s&p', amount=0.011)
 
     motion_blur_kernel = np.zeros((ksize, ksize))
     motion_blur_kernel[:, int((ksize - 1) / 2)] = np.ones(ksize)
     motion_blur_kernel = motion_blur_kernel / ksize
+
+    motion_blur_kernel = transform.rotate(motion_blur_kernel, angle)
 
     rain = signal.convolve2d(rain, motion_blur_kernel)
 
