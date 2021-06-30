@@ -1,3 +1,5 @@
+from skimage import util
+from scipy import signal
 import numpy as np
 
 
@@ -94,13 +96,13 @@ def psf2otf(psf, shape):
     if np.all(psf == 0):
         return np.zeros_like(psf)
 
-    inshape = psf.shape
+    in_shape = psf.shape
     # Pad the PSF to outsize
     psf = zero_pad(psf, shape, position='corner')
 
     # Circularly shift OTF so that the 'center' of the PSF is
     # [0,0] element of the array
-    for axis, axis_size in enumerate(inshape):
+    for axis, axis_size in enumerate(in_shape):
         psf = np.roll(psf, -int(axis_size / 2), axis=axis)
 
     # Compute the OTF
@@ -122,3 +124,16 @@ def get_c(m):
         'dyTdy': np.power(np.abs(psf2otf(np.array([[1], [-1]]), m.shape)), 2)
     }
     return c
+
+
+def synthetic_rain(shape, ksize=50):
+    rain = np.zeros(shape)
+    rain = util.random_noise(rain, mode='s&p', amount=0.011)
+
+    motion_blur_kernel = np.zeros((ksize, ksize))
+    motion_blur_kernel[:, int((ksize - 1) / 2)] = np.ones(ksize)
+    motion_blur_kernel = motion_blur_kernel / ksize
+
+    rain = signal.convolve2d(rain, motion_blur_kernel)
+
+    return rain
